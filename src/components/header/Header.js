@@ -13,7 +13,7 @@ export default function Header() {
 
     const handleSearchResult = () => {
         if(searchText){
-            navigate(`/movies/${searchText}`)
+            navigate(`/movies/${searchText}/page/1`)
             setSearchText('')
         }
         else{
@@ -30,7 +30,7 @@ export default function Header() {
 
     return (
         <header className={styles.header} onKeyDown={handleSearchKeyDown}>
-            <Link to={`/page/1`} className={styles.logo}>
+            <Link to={`/`} className={styles.logo}>
             <h1>The TMBD Movie API</h1></Link>
             <div className={styles.search}>
                 <input type="search"

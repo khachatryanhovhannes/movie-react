@@ -1,35 +1,31 @@
-import { useEffect , useState} from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { searchMovie } from "../../utils/API";
 import SingleFilm from "../../components/singleMovie/SingleFilm";
 import ReactPaginate from "react-paginate";
-
-import styles from "./SearchedResult.module.css"
+import styles from './SearchedResult.module.css'
 
 export default function SearchedResult() {
     const [searchFilmsData, setSearchFilmsData] = useState(new Array)
-    const { searchText } = useParams()
-    console.log(searchText)
+    const { searchText, page } = useParams()
+    const [pageNumber, setPageNumber] = useState(+page)
+    const navigate = useNavigate()
     useEffect(() => {
-        searchMovie(searchText)
+        navigate(`/movies/${searchText}/page/${pageNumber}`)
+
+        searchMovie(searchText, page)
             .then(res => res.json())
             .then(res => {
                 setSearchFilmsData(res)
             })
-    }, [searchText])
+    }, [pageNumber, page])
+
 
     const handleGetPageResult = (evt) => {
-        window.scrollTo({top: 0, left: 0, behavior: 'smooth'})
-        searchMovie(searchText, evt.selected + 1)
-        .then(response => response.json())
-        .then(response => {
-            setSearchFilmsData(response)
-        })
-        .catch(err => console.error(err));
-        return evt.selected + 1
- 
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+        setPageNumber(evt.selected + 1)
     }
-    return(
+    return (
 
         <div>
             <h1>Search results "{searchText}"</h1>
@@ -38,9 +34,12 @@ export default function SearchedResult() {
                 {
                     searchFilmsData.results && searchFilmsData.results.map((film) => {
                         return (
-                            <div key={film.id} className={styles.singleFIlm} >
+                            <Link key={film.id}
+                                className={styles.singleFIlm}
+                                to={`/movie/${film.id}`}
+                            >
                                 <SingleFilm film={film} />
-                            </div>
+                            </Link>
                         )
                     })
                 }
@@ -56,6 +55,7 @@ export default function SearchedResult() {
                     activeClassName={styles.activePage}
                     onPageChange={handleGetPageResult}
                     pageRangeDisplayed={5}
+                    forcePage={+page - 1}
                 />
 
             }

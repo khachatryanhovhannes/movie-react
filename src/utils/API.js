@@ -11,12 +11,20 @@ async function getMovies(page = 1) {
 }
 
 async function getGanre(path){
-    return await fetch (``, options)
+    return await fetch(`https://api.themoviedb.org/3/genre/movie/list`, options)
 }
 
-async function searchMovie(searchText, page = 1){
+async function searchMovie(searchText, page){
     return await fetch(`https://api.themoviedb.org/3/search/movie?query=${searchText}&page=${page}`, options)
 }
 
-export {getMovies, searchMovie}
+async function getSingleMovie(id){
+    return await fetch(`https://api.themoviedb.org/3/movie/${id}`, options)
+} 
+
+async function getFilmsWithGenre(genreId, page){
+    return await fetch(`https://api.themoviedb.org/3/discover/movie?with_genres=${genreId}&page=${page}`, options)
+}
+
+export {getMovies, searchMovie, getSingleMovie, getGanre, getFilmsWithGenre}
 

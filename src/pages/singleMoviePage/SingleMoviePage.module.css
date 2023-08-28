@@ -1,0 +1,28 @@
+.singleMoviePage{
+    padding: 0 30px;
+}
+
+.filmDescription{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.filmDescription>div>p, .proComps{
+    font-size: 20px;  
+    text-align: left;  
+    display: flex;
+    align-items: flex-start;
+    border-bottom: 1px solid black;
+
+}
+
+.filmDescription>div>p>span, .proComps>span{
+    display: inline-block;
+    width: 230px;
+}
+
+.filmDescription ul{
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}

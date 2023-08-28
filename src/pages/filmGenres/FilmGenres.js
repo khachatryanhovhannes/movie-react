@@ -1,24 +1,23 @@
-import { useState, useEffect } from "react";
-import SingleFilm from "../../components/singleMovie/SingleFilm"
-import styles from "./MovieHomePage.module.css"
-import { getMovies } from "../../utils/API";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams , Link } from "react-router-dom";
+import SingleFilm from "../../components/singleMovie/SingleFilm";
 import ReactPaginate from "react-paginate";
+import { getFilmsWithGenre } from "../../utils/API";
+import styles from "./FilmGenres.module.css"
 
+export default function FilmGenres() {
 
-export default function MovieHomePage() {
-    const [filmsData, setFilmsData] = useState(new Array)
-    const navigate = useNavigate()
-    const { page } = useParams()
+    const [genreFilmDate, setGenreFilmDate] = useState({})
+    const { genreId, page } = useParams()
     const [pageNumber, setPageNumber] = useState(+page)
+    const navigate = useNavigate()
     useEffect(() => {
-        navigate(`/page/${pageNumber}`)
-        getMovies(page)
-            .then(response => response.json())
-            .then(response => {
-                setFilmsData(response)
+        navigate(`/genre/${genreId}/page/${pageNumber}`)
+        getFilmsWithGenre(genreId, page)
+            .then(res => res.json())
+            .then(res => {
+                setGenreFilmDate(res)
             })
-            .catch(err => console.error(err));
     }, [pageNumber, page])
 
 
@@ -26,15 +25,14 @@ export default function MovieHomePage() {
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
         setPageNumber(evt.selected + 1)
     }
-
-
-
     return (
+
         <div>
+            <h1></h1>
 
             <div className={styles.films}>
                 {
-                    filmsData.results && filmsData.results.map((film) => {
+                    genreFilmDate.results && genreFilmDate.results.map((film) => {
                         return (
                             <Link key={film.id}
                                 className={styles.singleFIlm}
@@ -48,11 +46,11 @@ export default function MovieHomePage() {
             </div>
 
             {
-                filmsData && <ReactPaginate
+                genreFilmDate && <ReactPaginate
                     previousLabel={"<<"}
                     nextLabel={">>"}
                     breakLabel={"..."}
-                    pageCount={filmsData.total_pages}
+                    pageCount={genreFilmDate.total_pages}
                     containerClassName={styles.paginationContainer}
                     activeClassName={styles.activePage}
                     onPageChange={handleGetPageResult}
@@ -63,6 +61,8 @@ export default function MovieHomePage() {
             }
 
         </div>
-
     )
+
+
+
 }
